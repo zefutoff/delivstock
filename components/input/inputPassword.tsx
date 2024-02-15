@@ -13,7 +13,6 @@ export default function InputPassword() {
     <Input
       label="Password"
       variant="bordered"
-      placeholder="Entre ton mot de passe"
       endContent={
         <button
           className="focus:outline-none"
@@ -28,7 +27,6 @@ export default function InputPassword() {
         </button>
       }
       type={isVisible ? "text" : "password"}
-      className="max-w-xs"
     />
   );
 }

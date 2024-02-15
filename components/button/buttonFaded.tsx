@@ -7,7 +7,7 @@ interface ButtonFadedProps {
 
 const ButtonFaded: React.FC<ButtonFadedProps> = ({ title }) => {
   return (
-    <Button color="primary" variant="faded">
+    <Button className="" color="primary" variant="faded">
       {title}
     </Button>
   );
