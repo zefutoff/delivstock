@@ -1,13 +1,13 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -19,6 +19,9 @@ const config = {
     },
     extend: {
       colors: {
+        blue: "#A2CAED",
+        darkBlue: "#6789A7",
+        whiteGrey: "#E6E6E6",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -75,6 +78,12 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config
+} satisfies Config;
 
-export default config
+export default config;
+//#A2CAED Bleu ciel delivraide
+//#BD9A64 Marron claire
+//#FCB647 Orange/jaune pale
+//#6789A7 Bleu pale foncé
+//#7D7261 Marron/Gris foncé
+//#464D52 Gris foncé
