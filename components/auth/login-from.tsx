@@ -49,13 +49,13 @@ export const LoginForm = () => {
 
   return (
     <CardWrapper
-      headerLabel="Welcome back"
-      backButtonLabel="Don't have an account?"
+      headerLabel="Bienvenue !"
+      backButtonLabel="Tu n'a pas de compte ?"
       backButtonHref="/auth/register"
     >
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="space-y-2">
             <FormField
               control={form.control}
               name="email"
@@ -64,6 +64,7 @@ export const LoginForm = () => {
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
+                      className="bg-transparent"
                       {...field}
                       disabled={isPending}
                       placeholder="zefut@example.com"
@@ -79,9 +80,10 @@ export const LoginForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Mot de passe</FormLabel>
                   <FormControl>
                     <Input
+                      className="bg-transparent"
                       {...field}
                       disabled={isPending}
                       placeholder="******"
@@ -98,8 +100,12 @@ export const LoginForm = () => {
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button disabled={isPending} type="submit" className="w-full">
-            Login
+          <Button
+            disabled={isPending}
+            type="submit"
+            className="w-full bg-darkBlue"
+          >
+            Connexion
           </Button>
         </form>
       </Form>
