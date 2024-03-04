@@ -2,6 +2,7 @@
 
 import { logout } from "@/action/logout";
 import { UserButton } from "@/components/auth/user-button";
+import Navbar from "@/components/ui/navbar";
 import { useCurrentUser } from "@/hooks/use-current-user";
 
 const SettingsPage = () => {
@@ -12,9 +13,12 @@ const SettingsPage = () => {
   };
 
   return (
-    <div className="p-10 rounded-xl">
-      <UserButton />
-    </div>
+    <>
+      <Navbar />
+      <div className="p-10 rounded-xl">
+        <UserButton />
+      </div>
+    </>
   );
 };
 
