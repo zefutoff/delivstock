@@ -42,7 +42,7 @@ const Navbar = () => {
               <li className="mx-2 md:mx-0">
                 <a
                   className="text-gray-500 transition hover:text-gray-500/75"
-                  href="historique"
+                  href="history"
                 >
                   <Clock className="block md:hidden" color="#6789A7" />
                   <p className="hidden md:block">Historique</p>
@@ -52,7 +52,7 @@ const Navbar = () => {
               <li>
                 <a
                   className="text-gray-500 transition hover:text-gray-500/75"
-                  href="parametres"
+                  href="settings"
                 >
                   <Settings className="block md:hidden" color="#6789A7" />
 
