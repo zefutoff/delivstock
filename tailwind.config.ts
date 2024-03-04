@@ -83,7 +83,6 @@ const config = {
 export default config;
 //#A2CAED Bleu ciel delivraide
 //#BD9A64 Marron claire
-//#FCB647 Orange/jaune pale
 //#6789A7 Bleu pale foncé
 //#7D7261 Marron/Gris foncé
 //#464D52 Gris foncé
