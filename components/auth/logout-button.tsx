@@ -12,7 +12,10 @@ export const LogoutButton = ({ children }: LogoutButtonProps) => {
   };
 
   return (
-    <span onClick={onClick} className="cursor-pointer">
+    <span
+      onClick={onClick}
+      className="font-semibold text-red-600 cursor-pointer"
+    >
       {children}
     </span>
   );
