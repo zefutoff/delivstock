@@ -6,7 +6,7 @@ export const Navbar = () => {
   return (
     <div className="bg-white w-full fixed bottom-0 md:relative">
       <div className="flex h-16 items-center gap-8 px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-1 items-center justify-end justify-between w-full">
+        <div className="flex flex-1 items-center justify-between  w-full">
           <nav aria-label="Global" className="w-full md:w-auto">
             <ul className="flex gap-8 text-lm justify-center">
               <li className="mx-2 md:mx-0">
