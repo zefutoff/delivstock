@@ -2,7 +2,7 @@
 import { Home, Package, ShoppingBag, Clock, Settings } from "react-feather";
 import React from "react";
 
-const Navbar = () => {
+export const Navbar = () => {
   return (
     <div className="bg-white w-full fixed bottom-0 md:relative">
       <div className="flex h-16 items-center gap-8 px-4 sm:px-6 lg:px-8">
@@ -66,4 +66,3 @@ const Navbar = () => {
     </div>
   );
 };
-export default Navbar;
