@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef } from "react";
-import { Plus, Smile } from "react-feather";
+import { useState, useEffect, useRef, useTransition } from "react";
+import { Plus } from "react-feather";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -12,12 +11,51 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Input } from "./input";
 import { Button } from "./button";
+import { NewProductTypeSchema } from "@/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { addCategoryType } from "@/action/add-category-type";
+import { FormError } from "@/components/form-error";
+import { FormSuccess } from "@/components/form-success";
 type Option = "option1" | "addCategorie";
 
 export const CreateButton = () => {
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+  const [isPending, startTransition] = useTransition();
   const [showOptions, setShowOptions] = useState(false);
   const optionsRef = useRef<HTMLDivElement>(null);
   const [showAddCategoryDialog, setShowAddCategoryDialog] = useState(false);
+  const form = useForm<z.infer<typeof NewProductTypeSchema>>({
+    resolver: zodResolver(NewProductTypeSchema),
+    defaultValues: {
+      name: "",
+    },
+  });
+
+  //TODO - Revoir l'affichage quand le produit est enregistre avec succes
+
+  const onSubmit = (values: z.infer<typeof NewProductTypeSchema>) => {
+    setError("");
+    setSuccess("");
+
+    startTransition(() => {
+      addCategoryType(values).then((data) => {
+        setError(data?.error);
+        setSuccess(data?.success);
+      });
+    });
+
+    setShowAddCategoryDialog(false);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -50,10 +88,6 @@ export const CreateButton = () => {
       default:
         break;
     }
-  };
-
-  const handleAddCategory = () => {
-    setShowAddCategoryDialog(false);
   };
 
   const handleCloseAddCategoryDialog = () => {
@@ -94,19 +128,32 @@ export const CreateButton = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Ajouter une catégorie</AlertDialogTitle>
           </AlertDialogHeader>
-          <AlertDialogDescription className="flex">
-            <Button disabled variant={"outline"} className="mt-2 mb-2">
-              <Smile size={20} />
-            </Button>
-            <Input
-              className="mt-2 mb-2 ml-2"
-              type="text"
-              placeholder="Nom de la categorie"
-            ></Input>
+          <AlertDialogDescription>
+            <Form {...form}>
+              <form className="w-full" onSubmit={form.handleSubmit(onSubmit)}>
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          {...field}
+                          disabled={isPending}
+                          placeholder="Nom de la categorie"
+                        ></Input>
+                      </FormControl>
+                      <FormError message={error} />
+                      <FormSuccess message={success} />
+                      <Button className="w-full">Ajouter</Button>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </form>
+            </Form>
           </AlertDialogDescription>
-          <AlertDialogAction onClick={handleAddCategory}>
-            Ajouter
-          </AlertDialogAction>
           <AlertDialogCancel
             className="-mt-2"
             onClick={handleCloseAddCategoryDialog}
@@ -118,3 +165,10 @@ export const CreateButton = () => {
     </>
   );
 };
+function setSuccess(arg0: string) {
+  throw new Error("Function not implemented.");
+}
+
+function setError(arg0: string) {
+  throw new Error("Function not implemented.");
+}
