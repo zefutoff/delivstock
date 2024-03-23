@@ -20,7 +20,9 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <html lang="fr">
         <Toaster />
-        <body className="">{children}</body>
+        <body className="h-full w-full flex flex-col gap-y-10 items-center bg-whiteGrey">
+          {children}
+        </body>
       </html>
     </SessionProvider>
   );

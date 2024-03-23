@@ -1,5 +1,6 @@
 "use client";
 
+import { StockCard } from "@/components/stock-card";
 import { TitlePage } from "@/components/title-page";
 import { CreateButton } from "@/components/ui/create-button";
 import { Navbar } from "@/components/ui/navbar";
@@ -9,7 +10,7 @@ const StockPage = () => {
     <>
       <Navbar />
       <TitlePage label="Stock" />
-      <p>test</p>
+      <StockCard quantity={1} name="test" />
       <CreateButton />
     </>
   );
