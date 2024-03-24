@@ -129,7 +129,7 @@ export const CreateButton = () => {
         <AlertDialogTrigger></AlertDialogTrigger>
         <AlertDialogContent className="w-11/12 rounded-lg">
           <AlertDialogHeader>
-            <AlertDialogTitle>Ajouter une catégorie</AlertDialogTitle>
+            <AlertDialogTitle>Ajouter un produit</AlertDialogTitle>
           </AlertDialogHeader>
           <AlertDialogDescription>
             <Form {...form}>
@@ -144,7 +144,7 @@ export const CreateButton = () => {
                           type="text"
                           {...field}
                           disabled={isPending}
-                          placeholder="Nom de la categorie"
+                          placeholder="Nom du produit"
                         ></Input>
                       </FormControl>
                       <FormError message={error} />

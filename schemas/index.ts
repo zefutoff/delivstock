@@ -39,6 +39,6 @@ export const RegisterSchema = z.object({
 
 export const NewProductTypeSchema = z.object({
   name: z.string().min(3, {
-    message: "Un nom est requis",
+    message: "Minimum 3 caractères",
   }),
 });
