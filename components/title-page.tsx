@@ -6,9 +6,9 @@ interface TitlePageProps {
 
 export const TitlePage = ({ label }: TitlePageProps) => {
   return (
-    <div className="flex flex-col w-full items-center -mb-7 md:hidden">
+    <div className="flex flex-col w-full items-center  md:hidden">
       <p className="font-bold items-center m-3">{label}</p>
-      <Separator className="bg-Grey" />
+      <Separator className="bg-Grey mb-2.5" />
     </div>
   );
 };

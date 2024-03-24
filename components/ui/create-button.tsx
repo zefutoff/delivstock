@@ -26,6 +26,7 @@ import {
 import { addCategoryType } from "@/action/add-category-type";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
+import revalidateProductType from "@/lib/revalidate";
 type Option = "option1" | "addCategorie";
 
 export const CreateButton = () => {
@@ -56,6 +57,7 @@ export const CreateButton = () => {
     });
 
     setShowAddCategoryDialog(false);
+    revalidateProductType();
   };
 
   useEffect(() => {
@@ -166,10 +168,3 @@ export const CreateButton = () => {
     </>
   );
 };
-function setSuccess(arg0: string) {
-  throw new Error("Function not implemented.");
-}
-
-function setError(arg0: string) {
-  throw new Error("Function not implemented.");
-}
