@@ -11,8 +11,8 @@ interface StockCardProps {
 
 export const StockCard = ({ name, quantity }: StockCardProps) => {
   return (
-    <Card className="w-11/12">
-      <div className="m-2.5 flex justify-between text-base">
+    <Card className="w-11/12 -mb-6">
+      <div className="m-3 flex justify-between text-base">
         <div className="flex">
           <Image size={40} />
           <p className="ml-1">{name}</p>
