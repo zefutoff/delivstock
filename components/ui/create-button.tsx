@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef, useTransition } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Plus } from "react-feather";
 import {
   AlertDialog,
@@ -8,56 +8,62 @@ import {
   AlertDialogDescription,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Input } from "./input";
 import { Button } from "./button";
-import { NewProductTypeSchema } from "@/schemas";
+import { NewProductSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { addProduct } from "@/action/add-product";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import { addCategoryType } from "@/action/add-category-type";
-import { FormError } from "@/components/form-error";
-import { FormSuccess } from "@/components/form-success";
+  Select,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { SelectContent } from "@radix-ui/react-select";
 import revalidateProductType from "@/lib/revalidate";
 type Option = "option1" | "addCategorie";
 
 export const CreateButton = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
-  const [isPending, startTransition] = useTransition();
   const [showOptions, setShowOptions] = useState(false);
   const optionsRef = useRef<HTMLDivElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showAddCategoryDialog, setShowAddCategoryDialog] = useState(false);
-  const form = useForm<z.infer<typeof NewProductTypeSchema>>({
-    resolver: zodResolver(NewProductTypeSchema),
+
+  const form = useForm<z.infer<typeof NewProductSchema>>({
+    resolver: zodResolver(NewProductSchema),
     defaultValues: {
       name: "",
+      selectedOption: "all",
     },
   });
 
   //TODO - Revoir l'affichage quand le produit est enregistre avec succes
 
-  const onSubmit = (values: z.infer<typeof NewProductTypeSchema>) => {
+  const onSubmit = async (values: z.infer<typeof NewProductSchema>) => {
     setError("");
     setSuccess("");
+    setIsSubmitting(true);
 
-    startTransition(() => {
-      addCategoryType(values).then((data) => {
-        setError(data?.error);
-        setSuccess(data?.success);
-      });
-    });
-
-    setShowAddCategoryDialog(false);
-    revalidateProductType();
+    try {
+      const data = await addProduct(values);
+      if (data.error) {
+        setError(data.error);
+      } else {
+        setSuccess(data.success);
+        setTimeout(() => setShowAddCategoryDialog(false), 500);
+        revalidateProductType();
+      }
+    } catch (error) {
+      setError("Une erreur est survenue lors de l'ajout du produit.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   useEffect(() => {
@@ -82,7 +88,6 @@ export const CreateButton = () => {
   const handleOptionClick = (option: Option) => {
     switch (option) {
       case "option1":
-        // Gérer l'action pour l'option 1
         break;
       case "addCategorie":
         setShowOptions(false);
@@ -91,10 +96,6 @@ export const CreateButton = () => {
       default:
         break;
     }
-  };
-
-  const handleCloseAddCategoryDialog = () => {
-    setShowAddCategoryDialog(false);
   };
 
   return (
@@ -111,12 +112,6 @@ export const CreateButton = () => {
           <ul className="bg-white shadow-md rounded-md">
             <li
               className="cursor-pointer px-4 py-2 rounded-md hover:bg-gray-100"
-              onClick={() => handleOptionClick("option1")}
-            >
-              Inventaire
-            </li>
-            <li
-              className="cursor-pointer px-4 py-2 rounded-md hover:bg-gray-100"
               onClick={() => handleOptionClick("addCategorie")}
             >
               Une categorie
@@ -126,14 +121,13 @@ export const CreateButton = () => {
       )}
 
       <AlertDialog open={showAddCategoryDialog}>
-        <AlertDialogTrigger></AlertDialogTrigger>
-        <AlertDialogContent className="w-11/12 rounded-lg">
+        <AlertDialogContent className="w-11/12 max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
           <AlertDialogHeader>
             <AlertDialogTitle>Ajouter un produit</AlertDialogTitle>
           </AlertDialogHeader>
           <AlertDialogDescription>
             <Form {...form}>
-              <form className="w-full" onSubmit={form.handleSubmit(onSubmit)}>
+              <form onSubmit={form.handleSubmit((data) => onSubmit(data))}>
                 <FormField
                   control={form.control}
                   name="name"
@@ -141,26 +135,60 @@ export const CreateButton = () => {
                     <FormItem>
                       <FormControl>
                         <Input
-                          type="text"
                           {...field}
-                          disabled={isPending}
+                          disabled={isSubmitting}
                           placeholder="Nom du produit"
-                        ></Input>
+                        />
                       </FormControl>
-                      <FormError message={error} />
-                      <FormSuccess message={success} />
-                      <Button className="w-full">Ajouter</Button>
-                      <FormMessage />
+                    </FormItem>
+                  )}
+                ></FormField>
+                <Controller
+                  control={form.control}
+                  name="selectedOption"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Select
+                          {...field}
+                          onValueChange={(value) => field.onChange(value)}
+                          value={field.value}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Sélectionnez une catégorie" />
+                          </SelectTrigger>
+                          <SelectContent className="w-full">
+                            <SelectItem value="all">Tous les types</SelectItem>
+                            <SelectItem value="vegetarian">
+                              Végétarien
+                            </SelectItem>
+                            <SelectItem value="pescitarian">
+                              Pécitarien
+                            </SelectItem>
+                            <SelectItem value="flexitarian">
+                              Flexitarien
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
                     </FormItem>
                   )}
                 />
+                {isSubmitting ? (
+                  <Button disabled className="w-full">
+                    En cours...
+                  </Button>
+                ) : (
+                  <Button type="submit" className="w-full">
+                    Ajouter
+                  </Button>
+                )}
+                {error && <p className="text-red-500">{error}</p>}
+                {success && <p className="text-green-500">{success}</p>}
               </form>
             </Form>
           </AlertDialogDescription>
-          <AlertDialogCancel
-            className="-mt-2"
-            onClick={handleCloseAddCategoryDialog}
-          >
+          <AlertDialogCancel onClick={() => setShowAddCategoryDialog(false)}>
             Annuler
           </AlertDialogCancel>
         </AlertDialogContent>

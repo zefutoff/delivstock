@@ -37,8 +37,9 @@ export const RegisterSchema = z.object({
   }),
 });
 
-export const NewProductTypeSchema = z.object({
+export const NewProductSchema = z.object({
   name: z.string().min(3, {
     message: "Minimum 3 caractères",
   }),
+  selectedOption: z.enum(["all", "vegetarian", "pescitarian", "flexitarian"]),
 });
