@@ -1,11 +1,9 @@
 import { TitlePage } from "@/components/title-page";
 import { Navbar } from "@/components/ui/navbar";
 import { SaveButton } from "@/components/ui/save-button";
-import { NewProductSchema } from "@/schemas";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import db from "@/lib/prisma";
 import { StockCard } from "@/components/stock-card";
-type ProductType = "all" | "vegetarian" | "flexitarian" | "pescitarian";
 
 const getCurrentTime = () => {
   const currentDate = new Date();
