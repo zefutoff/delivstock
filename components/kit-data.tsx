@@ -17,6 +17,6 @@ export const KitData = async () => {
   const flexiProducts = await getProducts(["all", "flexitarian"]);
 
   return (
-    <KitTab data1={vegProducts} data2={pesceProducts} data3={flexiProducts} />
+    <KitTab vege={vegProducts} pesce={pesceProducts} flexi={flexiProducts} />
   );
 };

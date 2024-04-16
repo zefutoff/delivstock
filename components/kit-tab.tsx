@@ -12,15 +12,15 @@ const getCurrentTime = () => {
   return `${currentHour}:${currentMinute < 10 ? "0" + currentMinute : currentMinute}`;
 };
 
-interface CartItem {
+export interface CartItem {
   productId: string;
   quantity: number;
 }
 
 interface KitTabProps {
-  data1: ProductData[];
-  data2: ProductData[];
-  data3: ProductData[];
+  vege: ProductData[];
+  pesce: ProductData[];
+  flexi: ProductData[];
 }
 
 interface ProductData {
@@ -29,7 +29,7 @@ interface ProductData {
   quantity: number;
 }
 
-export const KitTab: FC<KitTabProps> = ({ data1, data2, data3 }) => {
+export const KitTab: FC<KitTabProps> = ({ vege, pesce, flexi }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
 
   const addToCart = (productId: string, quantity: number) => {
@@ -66,7 +66,7 @@ export const KitTab: FC<KitTabProps> = ({ data1, data2, data3 }) => {
 
         <TabsContent className="overflow-auto w-full" value="vegetarian">
           <div className="flex flex-col items-center">
-            {data1.map((products, index) => (
+            {vege.map((products, index) => (
               <StockKitCard
                 key={index}
                 quantity={products.quantity}
@@ -82,7 +82,7 @@ export const KitTab: FC<KitTabProps> = ({ data1, data2, data3 }) => {
         </TabsContent>
         <TabsContent className="overflow-auto w-full" value="flexitarian">
           <div className="flex flex-col items-center">
-            {data2.map((products, index) => (
+            {pesce.map((products, index) => (
               <StockKitCard
                 key={index}
                 quantity={products.quantity}
@@ -98,7 +98,7 @@ export const KitTab: FC<KitTabProps> = ({ data1, data2, data3 }) => {
         </TabsContent>
         <TabsContent className="overflow-auto w-full " value="pescitarian">
           <div className="flex flex-col items-center">
-            {data3.map((products, index) => (
+            {flexi.map((products, index) => (
               <StockKitCard
                 key={index}
                 quantity={products.quantity}
@@ -113,7 +113,7 @@ export const KitTab: FC<KitTabProps> = ({ data1, data2, data3 }) => {
           </div>
         </TabsContent>
       </Tabs>
-      <CheckKitButton />
+      <CheckKitButton cart={cart} />
     </>
   );
 };
