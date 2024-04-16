@@ -1,6 +1,6 @@
 "use client";
 
-import { Check } from "react-feather";
+import { ShoppingBag } from "react-feather";
 
 import {
   AlertDialog,
@@ -14,7 +14,7 @@ import {
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-export const SaveButton = () => {
+export const CheckKitButton = () => {
   const [showConfirmKitReady, setShowConfirmKitReady] = useState(false);
 
   const handleCloseConfirmKitReady = () => {
@@ -26,7 +26,7 @@ export const SaveButton = () => {
         className="fixed rounded-full bottom-20 bg-darkBlue text-white right-4 z-50 shadow-md md:hidden"
         onClick={() => setShowConfirmKitReady(!showConfirmKitReady)}
       >
-        <Check className="m-4" />
+        <ShoppingBag className="m-4" />
       </button>
 
       <AlertDialog open={showConfirmKitReady}>

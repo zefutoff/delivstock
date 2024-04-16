@@ -114,7 +114,7 @@ export const CreateButton = () => {
               className="cursor-pointer px-4 py-2 rounded-md hover:bg-gray-100"
               onClick={() => handleOptionClick("addCategorie")}
             >
-              Une categorie
+              Un produit
             </li>
           </ul>
         </div>
