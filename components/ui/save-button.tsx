@@ -13,8 +13,9 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "./drawer";
+import { CartItem } from "../kit-tab";
 
-export const CheckKitButton = () => {
+export const CheckKitButton = ({ cart }: { cart: CartItem[] }) => {
   const [showKitRecapDrawer, setshowKitRecapDrawer] = useState(false);
 
   const handleCloseKitRecapDrawer = () => {
