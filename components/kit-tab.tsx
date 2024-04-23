@@ -3,7 +3,7 @@
 import { FC, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StockKitCard } from "@/components/stock-kit-card";
-import { CheckKitButton } from "./ui/save-button";
+import { CheckKitButton } from "./save-button";
 
 const getCurrentTime = () => {
   const currentDate = new Date();
@@ -15,6 +15,7 @@ const getCurrentTime = () => {
 export interface CartItem {
   productId: string;
   quantity: number;
+  name: string;
 }
 
 interface KitTabProps {
@@ -32,7 +33,7 @@ interface ProductData {
 export const KitTab: FC<KitTabProps> = ({ vege, pesce, flexi }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
 
-  const addToCart = (productId: string, quantity: number) => {
+  const addToCart = (productId: string, quantity: number, name: string) => {
     setCart((currentCart: CartItem[]) => {
       const productIndex = currentCart.findIndex(
         (item) => item.productId === productId
@@ -42,14 +43,14 @@ export const KitTab: FC<KitTabProps> = ({ vege, pesce, flexi }) => {
         return currentCart
           .map((item, index) => {
             if (index === productIndex) {
-              return { ...item, quantity };
+              return { ...item, quantity, name };
             }
             return item;
           })
           .filter((item) => item.quantity > 0);
       } else {
         if (quantity > 0) {
-          return [...currentCart, { productId, quantity }];
+          return [...currentCart, { productId, quantity, name }];
         }
         return currentCart;
       }

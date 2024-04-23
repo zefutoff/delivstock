@@ -9,7 +9,7 @@ interface StockKitCardProps {
   name: string;
   quantity: number;
   productId: string;
-  onQuantityChange: (productId: string, quantity: number) => void;
+  onQuantityChange: (productId: string, quantity: number, name: string) => void;
 }
 
 export const StockKitCard = ({
@@ -23,14 +23,14 @@ export const StockKitCard = ({
   const increment = () => {
     const newQuantity = localQuantity + 1;
     setLocalQuantity(newQuantity);
-    onQuantityChange(productId, newQuantity);
+    onQuantityChange(productId, newQuantity, name);
   };
 
   const decrement = () => {
     const newQuantity = Math.max(0, localQuantity - 1);
     if (newQuantity !== localQuantity) {
       setLocalQuantity(newQuantity);
-      onQuantityChange(productId, newQuantity);
+      onQuantityChange(productId, newQuantity, name);
     }
   };
 
