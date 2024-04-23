@@ -1,6 +1,6 @@
 import { StockCard } from "@/components/stock-card";
 import { TitlePage } from "@/components/title-page";
-import { CreateButton } from "@/components/ui/create-button";
+import { CreateButton } from "@/components/create-button";
 import { Navbar } from "@/components/ui/navbar";
 import db from "@/lib/prisma";
 

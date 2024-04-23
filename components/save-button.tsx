@@ -12,8 +12,9 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "./drawer";
-import { CartItem } from "../kit-tab";
+} from "./ui/drawer";
+import { CartItem } from "./kit-tab";
+import { StockCard } from "./stock-card";
 
 export const CheckKitButton = ({ cart }: { cart: CartItem[] }) => {
   const [showKitRecapDrawer, setshowKitRecapDrawer] = useState(false);
@@ -37,6 +38,15 @@ export const CheckKitButton = ({ cart }: { cart: CartItem[] }) => {
               Vérifie bien les articles séléctionnées pour ne pas fausser les
               stocks !
             </DrawerDescription>
+            <div className="flex flex-col items-center">
+              {cart.map((products, index) => (
+                <StockCard
+                  key={index}
+                  quantity={products.quantity}
+                  name={products.name}
+                />
+              ))}
+            </div>
           </DrawerHeader>
           <DrawerFooter>
             <Button>Valider</Button>

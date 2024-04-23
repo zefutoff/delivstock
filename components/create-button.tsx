@@ -9,8 +9,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Input } from "./input";
-import { Button } from "./button";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 import { NewProductSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
