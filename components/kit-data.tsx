@@ -8,6 +8,9 @@ const getProducts = async (typeNames: string[]) => {
     where: {
       OR: typeNames.map((typeName) => ({ type: { typeName } })),
     },
+    orderBy: {
+      productName: "asc",
+    },
   });
 };
 
