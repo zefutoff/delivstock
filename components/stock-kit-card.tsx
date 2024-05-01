@@ -49,7 +49,7 @@ export const StockKitCard = ({
             -
           </button>
           <input
-            type="number"
+            type=""
             value={localQuantity}
             readOnly
             className="text-center w-14"
