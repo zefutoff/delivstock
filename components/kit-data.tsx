@@ -1,7 +1,7 @@
 "use server";
 
 import db from "@/lib/prisma";
-import { KitTab } from "./kit-tab";
+import { KitTab } from "@/components/kit-tab";
 
 const getProducts = async (typeNames: string[]) => {
   return await db.products.findMany({

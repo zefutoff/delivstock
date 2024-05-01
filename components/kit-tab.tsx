@@ -3,7 +3,7 @@
 import { FC, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StockKitCard } from "@/components/stock-kit-card";
-import { CheckKitButton } from "./save-button";
+import { CheckKitButton } from "@/components/save-button";
 
 const getCurrentTime = () => {
   const currentDate = new Date();
