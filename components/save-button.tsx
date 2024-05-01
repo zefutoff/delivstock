@@ -2,7 +2,7 @@
 
 import { ShoppingBag } from "react-feather";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -18,10 +18,24 @@ import { StockCard } from "./stock-card";
 
 export const CheckKitButton = ({ cart }: { cart: CartItem[] }) => {
   const [showKitRecapDrawer, setshowKitRecapDrawer] = useState(false);
+  const [isPending, startTansition] = useTransition();
 
   const handleCloseKitRecapDrawer = () => {
     setshowKitRecapDrawer(false);
   };
+
+  const handleValidateKitRecapDrawer = () => {
+    startTansition(async () => {
+      await fetch("/api/kit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(cart),
+      });
+    });
+  };
+
   return (
     <>
       <button
@@ -49,16 +63,9 @@ export const CheckKitButton = ({ cart }: { cart: CartItem[] }) => {
             </div>
           </DrawerHeader>
           <DrawerFooter>
-            <Button>Valider</Button>
-            <DrawerClose>
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={handleCloseKitRecapDrawer}
-              >
-                Annuler
-              </Button>
-            </DrawerClose>
+            <Button disabled={isPending} onClick={handleValidateKitRecapDrawer}>
+              Valider
+            </Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

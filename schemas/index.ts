@@ -43,3 +43,11 @@ export const NewProductSchema = z.object({
   }),
   selectedOption: z.enum(["all", "vegetarian", "pescitarian", "flexitarian"]),
 });
+
+export const KitProductSchema = z.array(
+  z.object({
+    productId: z.string(),
+    quantity: z.number(),
+    name: z.string(),
+  })
+);
