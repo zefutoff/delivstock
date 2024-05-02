@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Card } from "./ui/card";
 import { Image } from "react-feather";
 
@@ -9,6 +9,7 @@ interface StockKitCardProps {
   productId: string;
   onQuantityChange: (productId: string, quantity: number, name: string) => void;
   resetTrigger: boolean;
+  getQuantity: (productId: string) => number;
 }
 
 export const StockKitCard = ({
@@ -17,24 +18,36 @@ export const StockKitCard = ({
   productId,
   onQuantityChange,
   resetTrigger,
+  getQuantity,
 }: StockKitCardProps) => {
-  const [localQuantity, setLocalQuantity] = useState(0);
+  const [localQuantity, setLocalQuantity] = useState(() =>
+    getQuantity(productId)
+  );
 
   useEffect(() => {
-    setLocalQuantity(0);
-  }, [resetTrigger]);
+    setLocalQuantity(getQuantity(productId));
+  }, [resetTrigger, productId, getQuantity]);
 
-  const increment = () => {
+  const increment = useCallback(() => {
     const newQuantity = localQuantity + 1;
     setLocalQuantity(newQuantity);
     onQuantityChange(productId, newQuantity, name);
-  };
+  }, [localQuantity, productId, name, onQuantityChange]);
 
-  const decrement = () => {
+  const decrement = useCallback(() => {
     const newQuantity = Math.max(0, localQuantity - 1);
     setLocalQuantity(newQuantity);
     onQuantityChange(productId, newQuantity, name);
-  };
+  }, [localQuantity, productId, name, onQuantityChange]);
+
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newQuantity = parseInt(e.target.value, 10) || 0;
+      setLocalQuantity(newQuantity);
+      onQuantityChange(productId, newQuantity, name);
+    },
+    [productId, name, onQuantityChange]
+  );
 
   return (
     <Card className="w-11/12 m-1">
@@ -53,7 +66,7 @@ export const StockKitCard = ({
           <input
             type="number"
             value={localQuantity}
-            onChange={(e) => setLocalQuantity(Number(e.target.value))}
+            onChange={handleInputChange}
             className="text-center w-14"
           />
           <button type="button" className="ml-2" onClick={increment}>

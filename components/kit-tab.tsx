@@ -57,6 +57,12 @@ export const KitTab: FC<KitTabProps> = ({ vege, pesce, flexi }) => {
       }
     });
   };
+
+  const getQuantity = (productId: string) => {
+    const item = cart.find((item) => item.productId === productId);
+    return item ? item.quantity : 0;
+  };
+
   return (
     <>
       <Tabs defaultValue="vegetarian" className="flex flex-col w-11/12 h-5/6">
@@ -76,6 +82,7 @@ export const KitTab: FC<KitTabProps> = ({ vege, pesce, flexi }) => {
                 productId={products.productId}
                 onQuantityChange={addToCart}
                 resetTrigger={resetTrigger}
+                getQuantity={getQuantity}
               />
             ))}
             <p className="p-5 italic text-gray-500 text-sm">
@@ -93,6 +100,7 @@ export const KitTab: FC<KitTabProps> = ({ vege, pesce, flexi }) => {
                 productId={products.productId}
                 onQuantityChange={addToCart}
                 resetTrigger={resetTrigger}
+                getQuantity={getQuantity}
               />
             ))}
             <p className="p-5 italic text-gray-500 text-sm">
@@ -110,6 +118,7 @@ export const KitTab: FC<KitTabProps> = ({ vege, pesce, flexi }) => {
                 productId={products.productId}
                 onQuantityChange={addToCart}
                 resetTrigger={resetTrigger}
+                getQuantity={getQuantity}
               />
             ))}
             <p className="p-5 italic text-gray-500 text-sm">
