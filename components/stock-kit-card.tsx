@@ -1,6 +1,4 @@
-"use client";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "./ui/card";
 import { Image } from "react-feather";
 
@@ -10,6 +8,7 @@ interface StockKitCardProps {
   quantity: number;
   productId: string;
   onQuantityChange: (productId: string, quantity: number, name: string) => void;
+  resetTrigger: boolean;
 }
 
 export const StockKitCard = ({
@@ -17,8 +16,13 @@ export const StockKitCard = ({
   quantity,
   productId,
   onQuantityChange,
+  resetTrigger,
 }: StockKitCardProps) => {
   const [localQuantity, setLocalQuantity] = useState(0);
+
+  useEffect(() => {
+    setLocalQuantity(0);
+  }, [resetTrigger]);
 
   const increment = () => {
     const newQuantity = localQuantity + 1;
@@ -28,10 +32,8 @@ export const StockKitCard = ({
 
   const decrement = () => {
     const newQuantity = Math.max(0, localQuantity - 1);
-    if (newQuantity !== localQuantity) {
-      setLocalQuantity(newQuantity);
-      onQuantityChange(productId, newQuantity, name);
-    }
+    setLocalQuantity(newQuantity);
+    onQuantityChange(productId, newQuantity, name);
   };
 
   return (
@@ -49,9 +51,9 @@ export const StockKitCard = ({
             -
           </button>
           <input
-            type=""
+            type="number"
             value={localQuantity}
-            readOnly
+            onChange={(e) => setLocalQuantity(Number(e.target.value))}
             className="text-center w-14"
           />
           <button type="button" className="ml-2" onClick={increment}>

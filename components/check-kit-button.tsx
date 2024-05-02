@@ -6,7 +6,6 @@ import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
@@ -15,24 +14,44 @@ import {
 } from "./ui/drawer";
 import { CartItem } from "./kit-tab";
 import { StockCard } from "./stock-card";
+import { toast } from "sonner";
 
-export const CheckKitButton = ({ cart }: { cart: CartItem[] }) => {
+export const CheckKitButton = ({
+  cart,
+  onResetCart,
+  onResetTrigger,
+}: {
+  cart: CartItem[];
+  onResetCart: () => void;
+  onResetTrigger: () => void;
+}) => {
   const [showKitRecapDrawer, setshowKitRecapDrawer] = useState(false);
   const [isPending, startTansition] = useTransition();
 
-  const handleCloseKitRecapDrawer = () => {
-    setshowKitRecapDrawer(false);
-  };
-
   const handleValidateKitRecapDrawer = () => {
     startTansition(async () => {
-      await fetch("/api/kit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(cart),
-      });
+      try {
+        const response = await fetch("/api/kit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(cart),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          toast.success(data.message);
+          setshowKitRecapDrawer(false);
+          onResetCart();
+          onResetTrigger();
+        } else {
+          toast.error(data.message);
+        }
+      } catch (error) {
+        toast.error("Une erreur est survenue lors de la validation du kit !");
+      }
     });
   };
 
@@ -52,7 +71,7 @@ export const CheckKitButton = ({ cart }: { cart: CartItem[] }) => {
               Vérifie bien les articles séléctionnées pour ne pas fausser les
               stocks !
             </DrawerDescription>
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center overflow-y-auto max-h-96">
               {cart.map((products, index) => (
                 <StockCard
                   key={index}
@@ -63,7 +82,10 @@ export const CheckKitButton = ({ cart }: { cart: CartItem[] }) => {
             </div>
           </DrawerHeader>
           <DrawerFooter>
-            <Button disabled={isPending} onClick={handleValidateKitRecapDrawer}>
+            <Button
+              disabled={isPending || cart.length === 0}
+              onClick={handleValidateKitRecapDrawer}
+            >
               Valider
             </Button>
           </DrawerFooter>

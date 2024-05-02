@@ -3,7 +3,7 @@
 import { FC, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StockKitCard } from "@/components/stock-kit-card";
-import { CheckKitButton } from "@/components/save-button";
+import { CheckKitButton } from "@/components/check-kit-button";
 
 const getCurrentTime = () => {
   const currentDate = new Date();
@@ -32,6 +32,7 @@ interface ProductData {
 
 export const KitTab: FC<KitTabProps> = ({ vege, pesce, flexi }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [resetTrigger, setResetTrigger] = useState(false);
 
   const addToCart = (productId: string, quantity: number, name: string) => {
     setCart((currentCart: CartItem[]) => {
@@ -74,6 +75,7 @@ export const KitTab: FC<KitTabProps> = ({ vege, pesce, flexi }) => {
                 name={products.productName}
                 productId={products.productId}
                 onQuantityChange={addToCart}
+                resetTrigger={resetTrigger}
               />
             ))}
             <p className="p-5 italic text-gray-500 text-sm">
@@ -90,6 +92,7 @@ export const KitTab: FC<KitTabProps> = ({ vege, pesce, flexi }) => {
                 name={products.productName}
                 productId={products.productId}
                 onQuantityChange={addToCart}
+                resetTrigger={resetTrigger}
               />
             ))}
             <p className="p-5 italic text-gray-500 text-sm">
@@ -106,6 +109,7 @@ export const KitTab: FC<KitTabProps> = ({ vege, pesce, flexi }) => {
                 name={products.productName}
                 productId={products.productId}
                 onQuantityChange={addToCart}
+                resetTrigger={resetTrigger}
               />
             ))}
             <p className="p-5 italic text-gray-500 text-sm">
@@ -114,7 +118,11 @@ export const KitTab: FC<KitTabProps> = ({ vege, pesce, flexi }) => {
           </div>
         </TabsContent>
       </Tabs>
-      <CheckKitButton cart={cart} />
+      <CheckKitButton
+        cart={cart}
+        onResetCart={() => setCart([])}
+        onResetTrigger={() => setResetTrigger((prev) => !prev)}
+      />
     </>
   );
 };
