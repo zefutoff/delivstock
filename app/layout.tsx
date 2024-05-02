@@ -17,13 +17,13 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <SessionProvider session={session}>
-      <html lang="fr">
-        <Toaster />
-        <body className="h-full w-full flex flex-col items-center bg-whiteGrey">
+    <html lang="fr">
+      <body className="h-full w-full flex flex-col items-center bg-whiteGrey">
+        <SessionProvider session={session}>
+          <Toaster />
           {children}
-        </body>
-      </html>
-    </SessionProvider>
+        </SessionProvider>
+      </body>
+    </html>
   );
 }
