@@ -12,7 +12,7 @@ const getCurrentTime = () => {
 };
 
 const StockPage = async () => {
-  const numberProductType = await db.products.findMany();
+  const numberProductType = await db.products.findMany({ orderBy: { productName: "asc" } });
   return (
     <>
       <Navbar />
