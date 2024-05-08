@@ -20,21 +20,15 @@ export const addProduct = async (values: z.infer<typeof NewProductSchema>) => {
     },
   });
 
-  console.log(1);
-
   if (!productType) {
     return { error: "Type de produit invalide !" };
   }
-
-  console.log(2);
 
   const existingProductType = await getProductTypeByName(name);
 
   if (existingProductType) {
     return { error: "Ce type de produit existe déjà" };
   }
-
-  console.log(3);
 
   await db.products.create({
     data: {
