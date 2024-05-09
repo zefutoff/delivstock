@@ -1,0 +1,95 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id             String           @id @default(cuid())
+  name           String?
+  email          String?          @unique
+  emailVerified  DateTime?
+  image          String?
+  password       String?
+  role           Role             @default(USER)
+  inventories    Inventory[]
+  collects       Collect[]
+  collectDetails CollectDetails[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Products {
+  productId      String           @id @default(cuid())
+  productName    String
+  quantity       Int
+  typeId         String
+  type           ProductType      @relation(fields: [typeId], references: [typeId]) // Renommage pour correspondre au script
+  collectDetails CollectDetails[]
+}
+
+model ProductType {
+  typeId   String     @id @default(cuid())
+  typeName String
+  products Products[]
+}
+
+model PasswordResetToken {
+  email   String
+  expires DateTime
+  id      String   @id @default(cuid())
+  token   String
+}
+
+model Inventory {
+  description      String
+  inventoryDate    DateTime
+  inventoryId      String             @id @default(cuid())
+  userId           String
+  user             User               @relation(fields: [userId], references: [id])
+  inventoryDetails InventoryDetails[]
+}
+
+model InventoryDetails {
+  comment         String
+  detailsId       String    @id @default(cuid())
+  inventoryId     String
+  inventoryDate   DateTime
+  productId       String
+  quantityChanged String
+  inventory       Inventory @relation(fields: [inventoryId], references: [inventoryId])
+}
+
+model Collect {
+  collectionDate DateTime
+  collectionId   String           @id @default(cuid())
+  collectionName String
+  open           Boolean
+  userId         String
+  user           User             @relation(fields: [userId], references: [id])
+  collectDetails CollectDetails[]
+}
+
+model CollectDetails {
+  collectionDetailId String   @id @default(cuid())
+  collectionId       String
+  productId          String
+  quantityCollected  Int
+  userId             String
+  collect            Collect  @relation(fields: [collectionId], references: [collectionId])
+  product            Products @relation(fields: [productId], references: [productId])
+  user               User     @relation(fields: [userId], references: [id])
+}
+
+model VerificationToken {
+  email   String   @unique
+  expires DateTime
+  id      String
+  token   String
+}
