@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect, useRef } from "react";
 import { Plus } from "react-feather";
 import {
@@ -25,11 +26,10 @@ import {
 } from "@/components/ui/select";
 import { SelectContent } from "@radix-ui/react-select";
 import revalidateProductType from "@/lib/revalidate";
-type Option = "option1" | "addCategorie";
+import { toast } from "sonner";
+type Option = "addInventory" | "addCategorie";
 
 export const CreateButton = () => {
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
   const [showOptions, setShowOptions] = useState(false);
   const optionsRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,24 +43,24 @@ export const CreateButton = () => {
     },
   });
 
-  //TODO - Revoir l'affichage quand le produit est enregistre avec succes
+  //TODO : 
+  // - Vider les champs du formualire d'ajout de produit
+  // - Gérer le cas d'un produit deja présent avec le meme nom
 
   const onSubmit = async (values: z.infer<typeof NewProductSchema>) => {
-    setError("");
-    setSuccess("");
     setIsSubmitting(true);
 
     try {
       const data = await addProduct(values);
       if (data.error) {
-        setError(data.error);
+        toast.error(data.error);
       } else {
-        setSuccess(data.success);
+        toast.success("Produit ajouté avec succès.");
         setTimeout(() => setShowAddCategoryDialog(false), 500);
         revalidateProductType();
       }
     } catch (error) {
-      setError("Une erreur est survenue lors de l'ajout du produit.");
+      toast.error("Une erreur est survenue lors de l'ajout du produit.");
     } finally {
       setIsSubmitting(false);
     }
@@ -87,7 +87,7 @@ export const CreateButton = () => {
 
   const handleOptionClick = (option: Option) => {
     switch (option) {
-      case "option1":
+      case "addInventory":
         break;
       case "addCategorie":
         setShowOptions(false);
@@ -115,6 +115,12 @@ export const CreateButton = () => {
               onClick={() => handleOptionClick("addCategorie")}
             >
               Un produit
+            </li>
+            <li
+              className="cursor-pointer px-4 py-2 rounded-md hover:bg-gray-100"
+              onClick={() => handleOptionClick("addInventory")}
+            >
+              Un inventaire
             </li>
           </ul>
         </div>
@@ -154,10 +160,10 @@ export const CreateButton = () => {
                           onValueChange={(value) => field.onChange(value)}
                           value={field.value}
                         >
-                          <SelectTrigger className="w-full">
+                          <SelectTrigger>
                             <SelectValue placeholder="Sélectionnez une catégorie" />
                           </SelectTrigger>
-                          <SelectContent className="w-full">
+                          <SelectContent>
                             <SelectItem value="all">Tous les types</SelectItem>
                             <SelectItem value="vegetarian">
                               Végétarien
@@ -183,8 +189,6 @@ export const CreateButton = () => {
                     Ajouter
                   </Button>
                 )}
-                {error && <p className="text-red-500">{error}</p>}
-                {success && <p className="text-green-500">{success}</p>}
               </form>
             </Form>
           </AlertDialogDescription>
