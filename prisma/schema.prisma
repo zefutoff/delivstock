@@ -1,10 +1,16 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL")
 }
 
 generator client {
   provider = "prisma-client-js"
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }
 
 model User {
@@ -14,24 +20,77 @@ model User {
   emailVerified  DateTime?
   image          String?
   password       String?
-  role           Role             @default(USER)
-  inventories    Inventory[]
-  collects       Collect[]
-  collectDetails CollectDetails[]
+  role           UserRole         @default(USER)
+  accounts       Account[]
+  Inventory      Inventory[]
+  Collects       Collect[]
+  CollectDetails CollectDetails[]
 }
 
-enum Role {
-  USER
-  ADMIN
+model Account {
+  Id            String  @id @default(cuid())
+  userId        String
+  type          String
+  refresh_Token String? @db.Text
+  access_Token  String? @db.Text
+  expires_at    Int?
+  token_type    String?
+  scope         String?
+  id_token      String? @db.Text
+  session_state String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model PasswordResetToken {
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model Inventory {
+  inventoryId   String   @id @default(cuid())
+  userId        String
+  inventoryDate DateTime
+  description   String
+
+  user             User               @relation(fields: [userId], references: [id])
+  inventoryDetails InventoryDetails[]
+}
+
+model InventoryDetails {
+  detailsId       String   @id @default(cuid())
+  inventoryId     String
+  productId       String
+  quantityChanged Int
+  inventoryDate   DateTime
+  comment         String
+
+  inventory Inventory @relation(fields: [inventoryId], references: [inventoryId])
+  product   Products  @relation(fields: [productId], references: [productId])
 }
 
 model Products {
-  productId      String           @id @default(cuid())
-  productName    String
-  quantity       Int
-  typeId         String
-  type           ProductType      @relation(fields: [typeId], references: [typeId]) // Renommage pour correspondre au script
-  collectDetails CollectDetails[]
+  productId   String @id @default(cuid())
+  typeId      String
+  productName String
+  quantity    Int
+
+  type             ProductType        @relation(fields: [typeId], references: [typeId]) // Renommage pour correspondre au script
+  InventoryDetails InventoryDetails[]
+  CollectDetails   CollectDetails[]
 }
 
 model ProductType {
@@ -40,56 +99,26 @@ model ProductType {
   products Products[]
 }
 
-model PasswordResetToken {
-  email   String
-  expires DateTime
-  id      String   @id @default(cuid())
-  token   String
-}
-
-model Inventory {
-  description      String
-  inventoryDate    DateTime
-  inventoryId      String             @id @default(cuid())
-  userId           String
-  user             User               @relation(fields: [userId], references: [id])
-  inventoryDetails InventoryDetails[]
-}
-
-model InventoryDetails {
-  comment         String
-  detailsId       String    @id @default(cuid())
-  inventoryId     String
-  inventoryDate   DateTime
-  productId       String
-  quantityChanged String
-  inventory       Inventory @relation(fields: [inventoryId], references: [inventoryId])
-}
-
 model Collect {
-  collectionDate DateTime
-  collectionId   String           @id @default(cuid())
-  collectionName String
-  open           Boolean
+  collectionId   String   @id @default(cuid())
   userId         String
-  user           User             @relation(fields: [userId], references: [id])
+  collectionName String
+  collectionDate DateTime
+  open           Boolean
+
   collectDetails CollectDetails[]
+
+  user User @relation(fields: [userId], references: [id])
 }
 
 model CollectDetails {
-  collectionDetailId String   @id @default(cuid())
+  collectionDetailId String @id @default(cuid())
   collectionId       String
   productId          String
-  quantityCollected  Int
   userId             String
-  collect            Collect  @relation(fields: [collectionId], references: [collectionId])
-  product            Products @relation(fields: [productId], references: [productId])
-  user               User     @relation(fields: [userId], references: [id])
-}
+  quantityCollected  Int
 
-model VerificationToken {
-  email   String   @unique
-  expires DateTime
-  id      String
-  token   String
+  collect Collect  @relation(fields: [collectionId], references: [collectionId])
+  product Products @relation(fields: [productId], references: [productId])
+  user    User     @relation(fields: [userId], references: [id])
 }
