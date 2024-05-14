@@ -12,11 +12,14 @@ const getCurrentTime = () => {
 };
 
 const StockPage = async () => {
-  const numberProductType = await db.products.findMany({ orderBy: { productName: "asc" } });
+  const numberProductType = await db.products.findMany({
+    orderBy: { productName: "asc" },
+  });
   return (
     <>
       <Navbar />
       <TitlePage label="Stock" />
+
       <div className="overflow-auto flex flex-col w-full h-5/6 items-center">
         {numberProductType.map((products, index) => (
           <StockCard
