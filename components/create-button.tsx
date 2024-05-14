@@ -42,11 +42,9 @@ export const CreateButton = () => {
       selectedOption: "all",
     },
   });
-
-  //TODO : 
+  //TODO :
   // - Vider les champs du formualire d'ajout de produit
   // - Gérer le cas d'un produit deja présent avec le meme nom
-
   const onSubmit = async (values: z.infer<typeof NewProductSchema>) => {
     setIsSubmitting(true);
 
@@ -131,7 +129,7 @@ export const CreateButton = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Ajouter un produit</AlertDialogTitle>
           </AlertDialogHeader>
-          <AlertDialogDescription>
+          <AlertDialogDescription asChild>
             <Form {...form}>
               <form onSubmit={form.handleSubmit((data) => onSubmit(data))}>
                 <FormField
