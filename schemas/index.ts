@@ -46,7 +46,7 @@ export const NewProductSchema = z.object({
 
 export const KitProductSchema = z.array(
   z.object({
-    productId: z.string(),
+    id: z.string(),
     quantity: z.number(),
     name: z.string(),
   })

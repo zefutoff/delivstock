@@ -32,7 +32,7 @@ export const addProduct = async (values: z.infer<typeof NewProductSchema>) => {
 
   await db.products.create({
     data: {
-      productName: name,
+      name: name,
       quantity: 0,
       type: { connect: { typeId: productType.typeId } },
     },

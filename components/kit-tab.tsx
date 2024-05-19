@@ -25,8 +25,8 @@ interface KitTabProps {
 }
 
 interface ProductData {
-  productId: string;
-  productName: string;
+  id: string;
+  name: string;
   quantity: number;
 }
 
@@ -78,8 +78,8 @@ export const KitTab: FC<KitTabProps> = ({ vege, pesce, flexi }) => {
               <StockKitCard
                 key={index}
                 quantity={products.quantity}
-                name={products.productName}
-                productId={products.productId}
+                name={products.name}
+                productId={products.id}
                 onQuantityChange={addToCart}
                 resetTrigger={resetTrigger}
                 getQuantity={getQuantity}
@@ -96,8 +96,8 @@ export const KitTab: FC<KitTabProps> = ({ vege, pesce, flexi }) => {
               <StockKitCard
                 key={index}
                 quantity={products.quantity}
-                name={products.productName}
-                productId={products.productId}
+                name={products.name}
+                productId={products.id}
                 onQuantityChange={addToCart}
                 resetTrigger={resetTrigger}
                 getQuantity={getQuantity}
@@ -114,8 +114,8 @@ export const KitTab: FC<KitTabProps> = ({ vege, pesce, flexi }) => {
               <StockKitCard
                 key={index}
                 quantity={products.quantity}
-                name={products.productName}
-                productId={products.productId}
+                name={products.name}
+                productId={products.id}
                 onQuantityChange={addToCart}
                 resetTrigger={resetTrigger}
                 getQuantity={getQuantity}

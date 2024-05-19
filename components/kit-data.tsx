@@ -9,7 +9,7 @@ const getProducts = async (typeNames: string[]) => {
       OR: typeNames.map((typeName) => ({ type: { typeName } })),
     },
     orderBy: {
-      productName: "asc",
+      name: "asc",
     },
   });
 };

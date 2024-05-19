@@ -79,16 +79,16 @@ model InventoryDetails {
   comment         String
 
   inventory Inventory @relation(fields: [inventoryId], references: [inventoryId])
-  product   Products  @relation(fields: [productId], references: [productId])
+  product   Products  @relation(fields: [productId], references: [id])
 }
 
 model Products {
-  productId   String @id @default(cuid())
-  typeId      String
-  productName String
-  quantity    Int
+  id       String  @id @unique @default(cuid())
+  typeId   String
+  name     String?
+  quantity Int
 
-  type             ProductType        @relation(fields: [typeId], references: [typeId]) // Renommage pour correspondre au script
+  type             ProductType        @relation(fields: [typeId], references: [typeId])
   InventoryDetails InventoryDetails[]
   CollectDetails   CollectDetails[]
 }
@@ -119,6 +119,6 @@ model CollectDetails {
   quantityCollected  Int
 
   collect Collect  @relation(fields: [collectionId], references: [collectionId])
-  product Products @relation(fields: [productId], references: [productId])
+  product Products @relation(fields: [productId], references: [id])
   user    User     @relation(fields: [userId], references: [id])
 }

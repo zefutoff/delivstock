@@ -13,7 +13,7 @@ const getCurrentTime = () => {
 
 const StockPage = async () => {
   const numberProductType = await db.products.findMany({
-    orderBy: { productName: "asc" },
+    orderBy: { name: "asc" },
   });
   return (
     <>
@@ -25,7 +25,7 @@ const StockPage = async () => {
           <StockCard
             key={index}
             quantity={products.quantity}
-            name={products.productName}
+            name={products.name}
           />
         ))}
         <p className="p-5 italic text-gray-500 text-sm">
@@ -33,7 +33,7 @@ const StockPage = async () => {
         </p>
       </div>
 
-      <CreateButton />
+      <CreateButton products={numberProductType} />
     </>
   );
 };

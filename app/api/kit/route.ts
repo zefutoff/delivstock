@@ -37,7 +37,7 @@ export const POST = auth(async (req) => {
       console.log(values);
       for (const product of values) {
         await tx.products.update({
-          where: { productId: product.productId },
+          where: { id: product.id },
           data: { quantity: { decrement: product.quantity } },
         });
       }
