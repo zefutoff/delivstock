@@ -2,50 +2,29 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Plus } from "react-feather";
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { NewProductSchema } from "@/schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+
+import { NewInventorySchema, NewProductSchema } from "@/schemas";
+
+import { set, z } from "zod";
+
 import { addProduct } from "@/action/add-product";
-import {
-  Select,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { SelectContent } from "@radix-ui/react-select";
 import revalidateProductType from "@/lib/revalidate";
 import { toast } from "sonner";
+import AddProductDialog from "./add-product-dialog";
+import AddInventoryDialog from "./add-inventory-dialog";
+import { CartItem } from "./kit-tab";
+import { addInventory } from "@/action/edit-quantity-product";
+
 type Option = "addInventory" | "addCategorie";
 
-export const CreateButton = () => {
+export const CreateButton = ({ products }: { products: CartItem[] }) => {
   const [showOptions, setShowOptions] = useState(false);
   const optionsRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showAddCategoryDialog, setShowAddCategoryDialog] = useState(false);
+  const [showAddInventoryDialog, setShowAddInventoryDialog] = useState(false);
 
-  const form = useForm<z.infer<typeof NewProductSchema>>({
-    resolver: zodResolver(NewProductSchema),
-    defaultValues: {
-      name: "",
-      selectedOption: "all",
-    },
-  });
-  //TODO :
-  // - Vider les champs du formualire d'ajout de produit
-  // - Gérer le cas d'un produit deja présent avec le meme nom
-  const onSubmit = async (values: z.infer<typeof NewProductSchema>) => {
+  const onSubmitProduct = async (values: z.infer<typeof NewProductSchema>) => {
     setIsSubmitting(true);
 
     try {
@@ -59,6 +38,27 @@ export const CreateButton = () => {
       }
     } catch (error) {
       toast.error("Une erreur est survenue lors de l'ajout du produit.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const onSubmitInventory = async (
+    values: z.infer<typeof NewInventorySchema>
+  ) => {
+    console.log(values);
+    setIsSubmitting(true);
+
+    try {
+      const data = await addInventory(values);
+      if (data.error) {
+        toast.error(data.error);
+      } else {
+        toast.success("Inventaire ajouté avec succès.");
+        setTimeout(() => setShowAddInventoryDialog(false), 500);
+      }
+    } catch (error) {
+      toast.error("Une erreur est survenue lors de l'ajout de l'inventaire.");
     } finally {
       setIsSubmitting(false);
     }
@@ -86,6 +86,8 @@ export const CreateButton = () => {
   const handleOptionClick = (option: Option) => {
     switch (option) {
       case "addInventory":
+        setShowOptions(false);
+        setShowAddInventoryDialog(true);
         break;
       case "addCategorie":
         setShowOptions(false);
@@ -124,77 +126,20 @@ export const CreateButton = () => {
         </div>
       )}
 
-      <AlertDialog open={showAddCategoryDialog}>
-        <AlertDialogContent className="w-11/12 max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Ajouter un produit</AlertDialogTitle>
-          </AlertDialogHeader>
-          <AlertDialogDescription asChild>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit((data) => onSubmit(data))}>
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          disabled={isSubmitting}
-                          placeholder="Nom du produit"
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                ></FormField>
-                <Controller
-                  control={form.control}
-                  name="selectedOption"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Select
-                          {...field}
-                          onValueChange={(value) => field.onChange(value)}
-                          value={field.value}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Sélectionnez une catégorie" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">Tous les types</SelectItem>
-                            <SelectItem value="vegetarian">
-                              Végétarien
-                            </SelectItem>
-                            <SelectItem value="pescitarian">
-                              Pécitarien
-                            </SelectItem>
-                            <SelectItem value="flexitarian">
-                              Flexitarien
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                {isSubmitting ? (
-                  <Button disabled className="w-full">
-                    En cours...
-                  </Button>
-                ) : (
-                  <Button type="submit" className="w-full">
-                    Ajouter
-                  </Button>
-                )}
-              </form>
-            </Form>
-          </AlertDialogDescription>
-          <AlertDialogCancel onClick={() => setShowAddCategoryDialog(false)}>
-            Annuler
-          </AlertDialogCancel>
-        </AlertDialogContent>
-      </AlertDialog>
+      <AddInventoryDialog
+        open={showAddInventoryDialog}
+        onClose={() => setShowAddInventoryDialog(false)}
+        onSubmit={onSubmitInventory}
+        isSubmitting={isSubmitting}
+        products={products}
+      />
+
+      <AddProductDialog
+        open={showAddCategoryDialog}
+        onClose={() => setShowAddCategoryDialog(false)}
+        onSubmit={onSubmitProduct}
+        isSubmitting={isSubmitting}
+      />
     </>
   );
 };

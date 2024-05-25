@@ -13,7 +13,7 @@ const getCurrentTime = () => {
 };
 
 export interface CartItem {
-  productId: string;
+  id: string;
   quantity: number;
   name: string;
 }
@@ -37,7 +37,7 @@ export const KitTab: FC<KitTabProps> = ({ vege, pesce, flexi }) => {
   const addToCart = (productId: string, quantity: number, name: string) => {
     setCart((currentCart: CartItem[]) => {
       const productIndex = currentCart.findIndex(
-        (item) => item.productId === productId
+        (item) => item.id === productId
       );
 
       if (productIndex > -1) {
@@ -51,7 +51,7 @@ export const KitTab: FC<KitTabProps> = ({ vege, pesce, flexi }) => {
           .filter((item) => item.quantity > 0);
       } else {
         if (quantity > 0) {
-          return [...currentCart, { productId, quantity, name }];
+          return [...currentCart, { id: productId, quantity, name }];
         }
         return currentCart;
       }
@@ -59,7 +59,7 @@ export const KitTab: FC<KitTabProps> = ({ vege, pesce, flexi }) => {
   };
 
   const getQuantity = (productId: string) => {
-    const item = cart.find((item) => item.productId === productId);
+    const item = cart.find((item) => item.id === productId);
     return item ? item.quantity : 0;
   };
 
