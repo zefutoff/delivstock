@@ -64,7 +64,6 @@ export const StockKitCard = ({
             -
           </button>
           <input
-            type="number"
             value={localQuantity}
             onChange={handleInputChange}
             className="text-center w-14"
