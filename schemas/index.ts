@@ -37,13 +37,16 @@ export const RegisterSchema = z.object({
   }),
 });
 
-export const NewInventorySchema = z.array(
-  z.object({
-    id: z.string(),
-    quantity: z.number(),
-    name: z.string(),
-  })
-);
+export const NewInventorySchema = z.object({
+  items: z.array(
+    z.object({
+      id: z.string(),
+      quantity: z.number(),
+      name: z.string(),
+    })
+  )
+})
+
 
 export const NewProductSchema = z.object({
   name: z.string().min(3, {
