@@ -13,7 +13,7 @@ export const addInventory = async (
     return { error: "Champs invalide !" };
   }
 
-  const inventoryItems = validatedFields.data;
+  const inventoryItems = validatedFields.data.items;
 
   try {
     for (const item of inventoryItems) {

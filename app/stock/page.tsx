@@ -15,6 +15,7 @@ const StockPage = async () => {
   const numberProductType = await db.products.findMany({
     orderBy: { name: "asc" },
   });
+
   return (
     <>
       <Navbar />

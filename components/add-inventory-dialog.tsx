@@ -14,7 +14,7 @@ import {
 import { Separator } from "./ui/separator";
 import { z } from "zod";
 import { Button } from "./ui/button";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { CartItem } from "./kit-tab";
 
 interface AddInventoryDialogProps {
@@ -34,16 +34,18 @@ const AddInventoryDialog: React.FC<AddInventoryDialogProps> = ({
 }) => {
   const form = useForm<z.infer<typeof NewInventorySchema>>({
     resolver: zodResolver(NewInventorySchema),
-    defaultValues: { items: products },
+    defaultValues: {
+      items: products
+    },
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields } = useFieldArray({
     control: form.control,
     name: "items",
   });
 
   const handleFormSubmit = async (data: any) => {
-    await onSubmit(data.items);
+    await onSubmit(data);
     if (!isSubmitting) {
       form.reset();
     }
@@ -66,8 +68,8 @@ const AddInventoryDialog: React.FC<AddInventoryDialogProps> = ({
                   control={form.control}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <StockInventoryCard
-                      name={(value as any).name}
-                      quantity={(value as any).quantity}
+                      name={value.name}
+                      quantity={value.quantity}
                       onChange={(e) =>
                         onChange({
                           ...value,
