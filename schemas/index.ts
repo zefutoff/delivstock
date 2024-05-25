@@ -37,6 +37,14 @@ export const RegisterSchema = z.object({
   }),
 });
 
+export const NewInventorySchema = z.array(
+  z.object({
+    id: z.string(),
+    quantity: z.number(),
+    name: z.string(),
+  })
+);
+
 export const NewProductSchema = z.object({
   name: z.string().min(3, {
     message: "Minimum 3 caractères",
