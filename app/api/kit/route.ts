@@ -34,7 +34,6 @@ export const POST = auth(async (req) => {
 
   try {
     await db?.$transaction(async (tx) => {
-      console.log(values);
       for (const product of values) {
         await tx.products.update({
           where: { id: product.id },
@@ -43,7 +42,6 @@ export const POST = auth(async (req) => {
       }
     });
   } catch (error) {
-    console.error(error);
     return new Response(
       JSON.stringify({
         message: "Une erreur est survenue lors de la validation du kit.",
