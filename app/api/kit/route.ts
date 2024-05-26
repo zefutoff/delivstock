@@ -7,13 +7,13 @@ export const POST = auth(async (req) => {
   const user = req.auth?.user;
 
   if (!user) {
-    return Response.json(
-      {
+    return new Response(
+      JSON.stringify({
         message:
           "Vous devez être connecté pour pouvoir effectuer cette action.",
         status: "error",
-      },
-      { status: 401 }
+      }),
+      { status: 401, headers: { "Content-Type": "application/json" } }
     );
   }
 
@@ -23,12 +23,12 @@ export const POST = auth(async (req) => {
     body = await req.json();
     values = KitProductSchema.parse(body);
   } catch (error) {
-    return Response.json(
-      {
+    return new Response(
+      JSON.stringify({
         message: "Les données envoyées sont incorrectes.",
         status: "error",
-      },
-      { status: 400 }
+      }),
+      { status: 400, headers: { "Content-Type": "application/json" } }
     );
   }
 
@@ -44,20 +44,20 @@ export const POST = auth(async (req) => {
     });
   } catch (error) {
     console.error(error);
-    return Response.json(
-      {
+    return new Response(
+      JSON.stringify({
         message: "Une erreur est survenue lors de la validation du kit.",
         status: "error",
-      },
-      { status: 500 }
+      }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
 
-  return Response.json(
-    {
+  return new Response(
+    JSON.stringify({
       message: "Le kit a bien été validé.",
       status: "success",
-    },
-    { status: 200 }
+    }),
+    { status: 200, headers: { "Content-Type": "application/json" } }
   );
 });
