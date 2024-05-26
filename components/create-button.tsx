@@ -34,7 +34,7 @@ export const CreateButton = ({ products }: { products: CartItem[] }) => {
       } else {
         toast.success("Produit ajouté avec succès.");
         setTimeout(() => setShowAddCategoryDialog(false), 500);
-        revalidateProductType();
+        revalidateProductType("/stock");
       }
     } catch (error) {
       toast.error("Une erreur est survenue lors de l'ajout du produit.");
@@ -46,7 +46,6 @@ export const CreateButton = ({ products }: { products: CartItem[] }) => {
   const onSubmitInventory = async (
     values: z.infer<typeof NewInventorySchema>
   ) => {
-    console.log(values);
     setIsSubmitting(true);
 
     try {
@@ -56,6 +55,7 @@ export const CreateButton = ({ products }: { products: CartItem[] }) => {
       } else {
         toast.success("Inventaire ajouté avec succès.");
         setTimeout(() => setShowAddInventoryDialog(false), 500);
+        revalidateProductType("/stock");
       }
     } catch (error) {
       toast.error("Une erreur est survenue lors de l'ajout de l'inventaire.");
