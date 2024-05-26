@@ -30,7 +30,7 @@ export const addInventory = async (
       await db.products.update({
         where: { id },
         data: {
-          quantity: product.quantity + quantity,
+          quantity: quantity,
         },
       });
     }
