@@ -1,25 +1,16 @@
-"use server";
+import React from "react";
+import { CartItem, KitTab } from "@/components/kit-tab";
 
-import db from "@/lib/prisma";
-import { KitTab } from "@/components/kit-tab";
+interface KitDataComponentProps {
+  vege: CartItem[];
+  pesce: CartItem[];
+  flexi: CartItem[];
+}
 
-const getProducts = async (typeNames: string[]) => {
-  return await db.products.findMany({
-    where: {
-      OR: typeNames.map((typeName) => ({ type: { typeName } })),
-    },
-    orderBy: {
-      name: "asc",
-    },
-  });
-};
-
-export const KitData = async () => {
-  const vegProducts = await getProducts(["all", "vegetarian"]);
-  const pesceProducts = await getProducts(["all", "pescitarian"]);
-  const flexiProducts = await getProducts(["all", "flexitarian"]);
-
-  return (
-    <KitTab vege={vegProducts} pesce={pesceProducts} flexi={flexiProducts} />
-  );
+export const KitDataComponent: React.FC<KitDataComponentProps> = ({
+  vege,
+  pesce,
+  flexi,
+}) => {
+  return <KitTab vege={vege} pesce={pesce} flexi={flexi} />;
 };
