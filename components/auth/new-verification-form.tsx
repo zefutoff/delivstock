@@ -33,7 +33,7 @@ export const NewVerificationForm = () => {
       .catch(() => {
         setError("Quelques choses c'est mal passé !");
       });
-  }, [token]);
+  }, [token, success, error]);
 
   useEffect(() => {
     onSubmit();
