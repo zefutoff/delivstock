@@ -1,7 +1,7 @@
 "use client";
 
 import { Card } from "./ui/card";
-import { Image } from "react-feather";
+import { Image as ImageIcon } from "react-feather";
 import { Input } from "./ui/input";
 
 interface StockCardProps {
@@ -27,7 +27,7 @@ export const StockInventoryCard: React.FC<StockCardProps> = ({
     <Card className="w-11/12 m-1">
       <div className="m-3 flex justify-between text-base">
         <div className="flex items-center">
-          <Image size={40} />
+          <ImageIcon size={40} />
           <p className="ml-1">{name}</p>
         </div>
         <Input

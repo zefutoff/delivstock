@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Card } from "./ui/card";
-import { Image } from "react-feather";
+import { Image as ImageIcon } from "react-feather";
 
 interface StockKitCardProps {
   icon?: string;
@@ -53,7 +53,7 @@ export const StockKitCard = ({
     <Card className="w-11/12 m-1">
       <div className="m-2 flex items-center justify-between">
         <div className="flex items-center">
-          <Image size={40} />
+          <ImageIcon size={40} />
           <div className="ml-2">
             <p>{name}</p>
             <p className="text-sm text-gray-500">{quantity} en stock</p>
